@@ -1,4 +1,4 @@
-# How to Create a Multi-Node Cluster using Vagrant VMs
+# How to Create a Multi-Node Cluster using Kubeadm on Vagrant VMs
 
 # Introduction
 
