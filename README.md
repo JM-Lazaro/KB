@@ -1,10 +1,14 @@
-# KB 
+# How to Create a Multi-Node Cluster using Vagrant VMs
 
-Link Charly's KB for Kubernetes terms
+# Introduction
 
 This document aims for you to have a quick Kubernetes Cluster installation. Please check out the links for in-depth explanation of the steps or if you want to deviate from any of the set-up below. 
 
-# Vagrant Nodes Set-up
+https://kubernetes.io/docs/setup/independent/install-kubeadm/
+https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#before-you-begin
+
+
+# Vagrant VM Set-up
 
 ## Vagrantfile for Master:
 
@@ -92,7 +96,7 @@ You have to do the steps above for both your master and minion nodes. However, y
 kubeadm init --apiserver-advertise-address=192.168.44.10 --pod-network-cidr=10.244.0.0/16
 ```
 
-####Notes:
+#### Notes:
 
 apiserver-advertise-address
     - The IP address the API server is accessible on, to use for the API server cert.
