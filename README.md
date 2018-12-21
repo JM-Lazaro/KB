@@ -188,6 +188,7 @@ root@k8s-minion2-1:/var/lib/kubelet# cat kubeadm-flags.env
 KUBELET_KUBEADM_ARGS=--cgroup-driver=cgroupfs --network-plugin=cni --pod-infra-container-image=k8s.gcr.io/pause:3.1 --node-ip=192.168.44.20
 ```
 
+Restart your kubelet with `systemctl restart kubelet`.
 
 You should now be able to connect to your dd-agent pod. It will have a fixable error and I'll leave it to you to resolve as practice.
 
