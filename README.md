@@ -29,7 +29,7 @@ end
 Vagrant.configure("2") do |config|
  config.vm.box = "ubuntu/xenial64"
  config.vm.network "private_network", ip: "192.168.44.20" 
- config.vm.define "k8sminion1" .                           # change depending on how many 
+ config.vm.define "k8sminion1"                            # change depending on how many 
  config.vm.hostname = "k8s-minion1"                        # minions you want to deploy
 end
 ```
