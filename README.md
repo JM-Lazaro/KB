@@ -118,7 +118,9 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-#### additional installations for flannel
+#### Additional Installations for Flannel
+
+There are several options in the official website but let's just use Flannel for now. 
 
 ```
 sysctl net.bridge.bridge-nf-call-iptables=1
