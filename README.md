@@ -10,6 +10,8 @@ https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/#before-you-
 
 # Vagrant VM Set-up
 
+Create your master and node's vagrant file using the templates below. The only difference with the OOTB config file would be the `config.vm.network` option and hostnames.
+
 ## Vagrantfile for Master:
 
 ```
