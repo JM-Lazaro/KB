@@ -1,0 +1,50 @@
+# [Prometheus] Missing Metrics from Untyped Source
+Prometheus metrics text-based format is line oriented, lines are separated by a line feed character (\n) and the last line must end with a line feed character. Empty lines are ignored.
+
+A metric is composed by several fields:
+	* Metric name
+	* Any number of labels (can be 0), represented as a key-value array
+	* Current metric value
+	* Optional metric timestamp
+	* 
+A Prometheus metric can be as simple as:
+```
+http_requests 2
+```
+Or, including all the mentioned components:
+```
+http_requests_total{method="post",code="400"}  3   1395066363000
+```
+
+Metric output ~is typically~ should be preceded with # HELP and # TYPE metadata lines.
+The HELP string identifies the metric name and a brief description of it. The TYPE string identifies the type of metric. If there’s no TYPE before a metric, the metric is set to untyped. Everything else that starts with a # is parsed as a comment.
+
+```
+# HELP metric_name Description of the metric
+# TYPE metric_name type
+# Comment that's not parsed by prometheus
+http_requests_total{method="post",code="400"}  3   1395066363000
+```
+
+Source: https://sysdig.com/blog/prometheus-metrics/
+
+We depend on the  `TYPE` and `HELP` lines to determine the metadata of the metric and without those, the agent will ignore the metric altogether. 
+
+## Workaround
+As a workaround, the customers can use the type_overrides option in Prometheus/Openmetrics configuration file:
+
+```
+    ## @param type_overrides - list of key:value element - optional
+    ## Type override allows you to override a type in the prometheus payload
+    ## or type an untyped metrics (they're ignored by default)
+    ## Supported <METRIC_TYPE> are `gauge`, `counter`, `histogram`, `summary`
+    #
+    # type_overrides:
+    #   <METRIC_NAME>: <METRIC_TYPE>
+```
+
+Supplementary reference: https://prometheus.io/docs/concepts/metric_types/
+
+
+
+#Kubernetes
