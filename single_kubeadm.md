@@ -80,7 +80,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 There are several networking options in the official website but let's just use Flannel for now. 
 
-NOTE: Flannel gets updated regularly which makes the second command fail. When that happen, go to this page and get the new link/command: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#pod-network
+NOTE: Flannel gets updated regularly which makes the second command fail. When that happens, go to this page and get the new link/command: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#pod-network
 
 ```
 sysctl net.bridge.bridge-nf-call-iptables=1
