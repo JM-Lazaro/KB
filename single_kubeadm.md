@@ -97,3 +97,4 @@ Taints can be placed in nodes to let Kubernetes know not to schedule pods on the
 kubectl taint nodes --all node-role.kubernetes.io/master-
 ```
   
+..and that's it! You should now be able to run kubectl commands. Here's a reference page for things you can do with that: https://kubernetes.io/docs/reference/kubectl/cheatsheet/
