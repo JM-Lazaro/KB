@@ -22,6 +22,8 @@ vagrant up
 ## Turn off the page swap
 
 ```
+vagrant ssh 
+
 sudo su -
 
 swapoff -a
