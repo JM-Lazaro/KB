@@ -181,8 +181,9 @@ ad_identifiers:
   - nginx
 init_config:
 instances:
-  - name: %%host%%
-    port: %%port%%
+  - name: tcp_test
+    host: "%%host%%"
+    port: "%%port%%"
 EOF
 ```
 
@@ -194,11 +195,13 @@ DOCKER_CONTENT_TRUST=1 docker run -d \
 -v /var/run/docker.sock:/var/run/docker.sock:ro \
 -v /proc/:/host/proc/:ro \
 -v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro \
--v /root/DOGSTATSD:auto_conf.yaml:/etc/datadog-agent/conf.d/tcp_check.d/auto_conf.yaml \
+-v <path_to_file>/auto_conf.yaml:/etc/datadog-agent/conf.d/tcp_check.d/auto_conf.yaml \
 -e DD_API_KEY={{APIKEY}} \
 -e DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true \
 datadog/agent:7
 ```
+
+> Note: Mounting a file just makes the file accessible to the container. Any changes to the file will be reflected in the container and the host.
 
 ### Dogstatsd
 
