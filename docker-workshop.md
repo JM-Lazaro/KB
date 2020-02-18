@@ -1,0 +1,219 @@
+
+#### Create Your Docker Environment
+
+Follow the KB: https://github.com/DataDog/se-docs/wiki/Quick-Way-to-Install-Docker-Compose-on-Ubuntu-16.04
+
+#### Installation Command
+
+```
+DOCKER_CONTENT_TRUST=1 docker run -d --name dd-agent -v /var/run/docker.sock:/var/run/docker.sock:ro -v /proc/:/host/proc/:ro -v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro -e DD_API_KEY={{APIKEY}} datadog/agent:7
+```
+
+`DOCKER_CONTENT_TRUST`
+* makes sure that the image you are downloading from docker hub is signed by the publisher
+
+`docker run`
+* creates and starts the docker container
+
+`-d`
+* detach (like nohup), run the container in the background
+			
+`--name dd-agent`
+* sets the container name
+			
+`-v /var/run/docker.sock:/var/run/docker.sock:ro`
+* https://medium.com/better-programming/about-var-run-docker-sock-3bfd276e12fd
+* it's the unix socket that the Docker daemon listens to, giving the container access to Docker API	
+* docker events, docker logs, docker inspect
+			
+`-v /proc/:/host/proc/:ro`
+* where we get most host metrics e.g. `system.io.*`  are from `/proc/diskstats`
+			
+`-v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro`
+* where we get container utilization metrics any `docker.*
+			
+`-e DD_API_KEY={{API_KEY}}`
+`-e DD_LOG_LEVEL=debug`
+* config.go -  [https://github.com/DataDog/datadog-agent/blob/master/pkg/config/config.go](https://github.com/DataDog/datadog-agent/blob/master/pkg/config/config.go) 
+* env.go -  [https://github.com/DataDog/datadog-agent/blob/master/pkg/trace/config/env.go](https://github.com/DataDog/datadog-agent/blob/master/pkg/trace/config/env.go) 
+
+`datadog/agent:latest`
+* docker image and tag
+
+
+#### Install the Agent:
+
+Deploy Docker Agent container:
+
+```
+DOCKER_CONTENT_TRUST=1 docker run -d \
+--name dd-agent \
+-v /var/run/docker.sock:/var/run/docker.sock:ro \
+-v /proc/:/host/proc/:ro \
+-v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro \
+-e DD_API_KEY={{APIKEY}} \
+datadog/agent:7
+```
+
+##### Try these commands:
+
+* `docker ps`
+* `docker ps -a` # shows stopped containers
+* `docker stop dd-agent`
+* `docker start dd-agent`
+* `docker images`
+* `docker inspect <container id>`
+* `docker logs dd-agent`
+
+##### Run agent commands:
+
+* `docker exec -it dd-agent agent status`
+* `docker exec -it dd-agent agent configcheck`
+
+##### Access the agent container:
+
+`docker exec -it dd-agent bash`
+
+`agent status`
+`agent configcheck`
+
+* check out the directory structure e.g. `/etc/datadog-agent/`
+
+---
+
+#### Basic Networking
+
+Objectives:
+	- learn the ways containers can talk to each other
+	- learn how the host can talk to containers and vice versa
+
+##### Overview:
+
+##### Four different types of Docker network:
+* Bridge - default
+* Host
+* None
+* Custom Bridge
+
+##### Test Container Connections
+
+Install nginx container
+
+* `docker run -d --name mynginx nginx:latest`
+
+Check the Container IP using `docker inspect <container name>`
+
+Ex:
+```
+            "Networks": {
+                "bridge": {
+					[...]
+                    "Gateway": "172.17.0.1",
+                    "IPAddress": "172.17.0.2",
+```
+
+** Take note of the agent's and nginx's container IP.
+
+Check the connection from host to containers:
+
+* `curl <mynginx container IP>:80`
+
+Check connection between containers:
+
+* `docker exec -it dd-agent curl <nginx IP>:80`
+* `docker exec -it mynginx curl <dd-agent>:80`
+
+> TL;DR: 
+> 1. Containers and the host can use container IPs to talk to a container.
+
+Customers don't want to use container IPs because they are transient in nature - containers are deleted and recreated all the time, their IP changes each time.
+
+##### Host Ports
+
+Delete the nginx pod:
+
+`docker stop mynginx && docker rm mynginx`
+
+Recreate them with `-p` option. This option maps the container ports to a host port:
+
+* `docker run -d -p 80:80 --name mynginx nginx:latest`
+
+https://docs.docker.com/engine/reference/commandline/run/
+
+Check if the port mapping is successful:
+
+* `docker ps`
+
+```
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
+dff9e0d18c1d        nginx               "nginx -g 'daemon of…"   34 minutes ago      Up 25 minutes       0.0.0.0:80->80/tcp   nginx
+```
+
+Check the connection from the host:
+
+* `curl localhost:80`
+
+or with Host IPs:
+
+* `hostname -I` # one of these IPs is the Docker bridge Gateway IP
+* `curl <Host IP>:80`
+
+
+> TL;DR:
+> 1. Containers can map their ports to a host port using the `--publish`  option.
+> 2. Containers can direct traffic to the host using the Host IP or Docker Gateway IP.
+> 3. Alternatively, they can use `--net=host` but this is not recommended.
+
+
+### Integration AutoDiscovery
+
+### Dogstatsd
+
+ We'll create a very simple custom docker image for the next two exercise.
+
+```
+mkdir DOGSTATSD;
+
+cd DOGSTATSD;
+
+cat << EOF > dogstatsd.bash
+#!/bin/bash
+while true; do
+echo -n "custom_metric:60|g|#shell" | nc -v -u -w 1 \$DD_AGENT_HOST 8125
+sleep 5;
+done
+EOF
+
+cat << EOF > Dockerfile
+FROM nginx:latest
+COPY ./dogstatsd.bash /
+RUN chmod 777 ./dogstatsd.bash
+ENTRYPOINT ["/dogstatsd.bash"]
+EOF
+
+docker build -t test/image:1.0 .
+```
+
+
+## Sending Metrics to the Agent
+
+1. Recreate the agent with 
+2. 
+3. Run the custom container. This will represent the app container of the customers.
+
+`docker run -d --name test_app -e DD_AGENT_HOST=172.17.0.1 test/image:1.0`
+
+1. The agent needs the env var `DD_DOGSTATSD_
+2. 
+3. 
+4. Log into the mynginx container.
+5. Install netcat:
+`apt-get update`
+`apt install netcat -y`
+
+3. Send a test custom metric to the agent:
+
+`echo -n "custom_metric:60|g|#shell" | nc -v -u -w 1 <agent IP> 8125`
+
+4. This will not work, the agent 
+
