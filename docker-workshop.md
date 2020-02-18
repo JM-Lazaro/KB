@@ -167,9 +167,12 @@ or with Host IPs:
 
 #### Integration AutoDiscovery
 
+https://docs.datadoghq.com/agent/autodiscovery/integrations/?tab=docker
+
 There are two(three) ways of implementing autodiscovery with Docker:
 * Config Files
 * Docker Labels
+* Key-Value Store
 
 ##### Config Files
 
@@ -200,12 +203,28 @@ DOCKER_CONTENT_TRUST=1 docker run -d \
 -e DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true \
 datadog/agent:7
 ```
+Verify this with `agent status` / `agent configcheck`
 
 > Note: Mounting a file just makes the file accessible to the container. Any changes to the file will be reflected in the container and the host.
 
+##### Docker Labels
+
+Create an nginx container with auto-discovery labels:
+
+```
+docker run -d \
+--name tcp_nginx \
+-l com.datadoghq.ad.check_names='["tcp_check"]' \
+-l com.datadoghq.ad.init_configs='[{}]' \
+-l com.datadoghq.ad.instances='[{"name": "app_container","host": "%%host%%","port": "%%port%%"}]' \
+nginx:latest
+```
+
+Verify this with `agent status` / `agent configcheck`
+
 ### Dogstatsd
 
- We'll create a very simple custom docker image for the next two exercise.
+Create a simple custom image that will send a dogstatsd metric to the agent:
 
 ```
 mkdir DOGSTATSD;
@@ -216,40 +235,29 @@ cat << EOF > dogstatsd.bash
 #!/bin/bash
 while true; do
 echo -n "custom_metric:60|g|#shell" | nc -v -u -w 1 \$DD_AGENT_HOST 8125
-sleep 5;
+sleep 1;
 done
 EOF
 
 cat << EOF > Dockerfile
-FROM nginx:latest
+FROM debian:9
 COPY ./dogstatsd.bash /
 RUN chmod 777 ./dogstatsd.bash
+RUN apt-get update && apt-get install netcat -y
 ENTRYPOINT ["/dogstatsd.bash"]
 EOF
 
 docker build -t test/image:1.0 .
 ```
 
-
 ## Sending Metrics to the Agent
 
-1. Recreate the agent with 
-2. 
-3. Run the custom container. This will represent the app container of the customers.
+Run the custom container with the agent container IP or gatewayIP
 
-`docker run -d --name test_app -e DD_AGENT_HOST=172.17.0.1 test/image:1.0`
+`docker run -d --name test_app -e DD_AGENT_HOST={{agentIP or gatewayIP}} test/image:1.0`
 
-1. The agent needs the env var `DD_DOGSTATSD_
-2. 
-3. 
-4. Log into the mynginx container.
-5. Install netcat:
-`apt-get update`
-`apt install netcat -y`
+> This applies to APM tracers as well. The tracer needs the Agent's IP declared as its agent host along with port 8126 if necessary.
 
-3. Send a test custom metric to the agent:
+If we have time:
 
-`echo -n "custom_metric:60|g|#shell" | nc -v -u -w 1 <agent IP> 8125`
-
-4. This will not work, the agent 
-
+1. Use `--link`
