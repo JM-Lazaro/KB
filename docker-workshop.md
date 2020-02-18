@@ -165,7 +165,40 @@ or with Host IPs:
 > 3. Alternatively, they can use `--net=host` but this is not recommended.
 
 
-### Integration AutoDiscovery
+#### Integration AutoDiscovery
+
+There are two(three) ways of implementing autodiscovery with Docker:
+* Config Files
+* Docker Labels
+
+##### Config Files
+
+Create a local config file. For example:
+
+```
+cat << EOF > auto_conf.yaml
+ad_identifiers:
+  - nginx
+init_config:
+instances:
+  - name: %%host%%
+    port: %%port%%
+EOF
+```
+
+Mount the config file to the container's config directory:
+
+```
+DOCKER_CONTENT_TRUST=1 docker run -d \
+--name dd-agent \
+-v /var/run/docker.sock:/var/run/docker.sock:ro \
+-v /proc/:/host/proc/:ro \
+-v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro \
+-v /root/DOGSTATSD:auto_conf.yaml:/etc/datadog-agent/conf.d/tcp_check.d/auto_conf.yaml \
+-e DD_API_KEY={{APIKEY}} \
+-e DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true \
+datadog/agent:7
+```
 
 ### Dogstatsd
 
