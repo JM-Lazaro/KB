@@ -200,7 +200,6 @@ DOCKER_CONTENT_TRUST=1 docker run -d \
 -v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro \
 -v <path_to_file>/auto_conf.yaml:/etc/datadog-agent/conf.d/tcp_check.d/auto_conf.yaml \
 -e DD_API_KEY={{APIKEY}} \
--e DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true \
 datadog/agent:7
 ```
 Verify this with `agent status` / `agent configcheck`
