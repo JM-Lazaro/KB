@@ -88,6 +88,9 @@ Notice that the pod will be replaced by a new one. This is because a DaemonSet c
 
 #### Networking
 
+
+##### containerPort
+
 Copy this manifest into your local directory and use it to create a simple nginx pod. 
 
 * https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
@@ -106,11 +109,33 @@ Check the connection from the agent from the same host using IPs:
 * `kubectl exec -it <agent> curl <podIP>:80`
 * `kubectl exec -it <agent> curl <hostIP>:80`
 
+
+##### hostPort
+
+Uncomment the `hostPort` section from the nginx manifest and re-deploy:
+
+* `kubectl replace --force -f nginx_pod.yaml`
+
 Check the connection from the agent from a different host.
 
 * `kubectl exec -it <agent> curl <podIP>:80`
 * `kubectl exec -it <agent> curl <hostIP>:80`
 
+##### Services
 
+Copy this Service manifest into your local directory and deploy:
+
+* https://gist.github.com/JM-Lazaro/6961f15195ae8cb7a72db76426006492#file-2_service-yaml
+* `kubectl create -f nginx_service.yaml`
+
+Check the Service's details:
+
+* `kubectl get svc`
+
+You can connect to all pods with label `app: reverse-proxy` using the ClusterIP.
+
+* `kubectl exec -it <agent> curl <clusterIP>:80`
+
+#### AutoDiscovery
 
 
