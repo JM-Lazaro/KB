@@ -14,7 +14,7 @@ Installation Page: https://app.datadoghq.com/account/settings#agent/kubernetes
 
 https://github.com/DataDog/datadog-agent/tree/master/Dockerfiles/manifests
 
-* `kubetcl create -f .
+* `kubetcl create -f .`
 * `kubectl replace --force -f datadog-agent.yaml`
 
 
@@ -136,6 +136,43 @@ You can connect to all pods with label `app: reverse-proxy` using the ClusterIP.
 
 * `kubectl exec -it <agent> curl <clusterIP>:80`
 
-#### AutoDiscovery
+> These are some of the options the customers can use to configure static checks or to send customer metrics and APM traces to the datadog agent. 
+> There are some limitations to using `Service` so we recommend this only after careful considerations.
+> 1. Services sends traffic in a roundrobin, meaning, the host can be different from where the metric/trace came from.
+> 2. Due to the additional layer of abstraction, the agent won't be able to collect pod metadata.
+
+
+
+#### AutoDiscovery / Configuration Changes
+
+1. Config Map
+
+Config Map is an object in Kubernetes used to store files or texts. Copy this manifest and deploy:
+
+* https://gist.github.com/JM-Lazaro/6961f15195ae8cb7a72db76426006492#file-3_cm_tcp-yaml
+* `kubectl create -f cm_tcp.yaml
+
+Then mount/bind it in the agent pod:
+
+```
+        volumeMounts:
+[...]
+          - name: tcp
+            mountPath: conf.d/tcp_check.d/
+[...]
+      volumes:
+[...]
+        - configMap:
+            name: ddagent-tcp-configmap
+          name: tcp
+```
+
+2. Annotations
+
+Similar to Docker labels, we can put templates on Kubernetes Annotations.
+
+Copy this manifest and deploy:
+
+* https://gist.github.com/JM-Lazaro/6961f15195ae8cb7a72db76426006492#file-4_nginx_anno-yaml
 
 
