@@ -121,7 +121,7 @@ Check the connection from host to containers:
 Check connection between containers:
 
 * `docker exec -it dd-agent curl <nginx IP>:80`
-* `docker exec -it mynginx curl <dd-agent>:80`
+* `docker exec -it mynginx curl <dd-agent>:8126/v0.4/traces ` # The agent doesn't have a landing page on its ports nor does it have port 80 open by default. You should see something like an "EOF" message when you curl this endpoint.
 
 > TL;DR: 
 > 1. Containers and the host can use container IPs to talk to a container.
