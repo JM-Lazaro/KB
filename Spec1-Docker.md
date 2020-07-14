@@ -39,7 +39,7 @@
 	- `docker images`
 * Networks:
 	- `docker network ls`
--
+
 *  Logs:
 	- `docker logs <container id>` **can get logs from stopped containers
 * Container Metadata
