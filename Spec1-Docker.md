@@ -77,6 +77,7 @@ docker run -d \
 -v /proc/:/host/proc/:ro \
 -v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro \
 -e DD_API_KEY=<API_KEY> \
+-e DD_LOGGING_LEVEL=debug \
 -e DD_LOGS_ENABLED=true \
 -e DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true \
 datadog/agent:7
