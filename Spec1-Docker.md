@@ -21,6 +21,7 @@
 - Lightweight
 	- only has the bare minimum to run the application
 - Portability
+	- ability to install containers in any host with Docker.
 	- easy to install, easy to delete without leaving any straggler files
 - Security
 	- a container only has access to files you give it access to. This applies also applies to ports.
