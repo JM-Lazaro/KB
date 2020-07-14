@@ -25,8 +25,6 @@
 	- easy to install, easy to delete without leaving any straggler files
 - Security
 	- a container only has access to files you give it access to. This applies also applies to ports.
-- Configuration
-	- can limit cpu and memory resources in a container level, making allocations uniform across the board
  - Consistency
 	- You can be sure that the app deployed is the final version of the product that you want to run.
 
