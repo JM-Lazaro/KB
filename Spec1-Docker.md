@@ -25,7 +25,7 @@
 	- easy to install, easy to delete without leaving any straggler files
 	- applications with conflicting dependencies can coexist.
 - Security
-	- a container only has access to files you give it access to
+	- a container only has access to files you give it access to. This applies also applies to ports.
 - Configuration
 	- can limit cpu and memory resources in a container level, making allocations uniform across the board
  - Consistency
