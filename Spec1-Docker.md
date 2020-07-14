@@ -89,10 +89,10 @@ datadog/agent:7
 Sample Flare: https://datadog.zendesk.com/agent/tickets/316095
 
 How do you know if the flare is from a container?
-	- docker_inspect.yaml ***
-	- datadog.yaml
-	- diagnose.yaml
-	- docker_ps.yaml
+- docker_inspect.yaml ***
+- datadog.yaml
+- diagnose.yaml
+- docker_ps.yaml
 
 ## Networking Exercises
 	
