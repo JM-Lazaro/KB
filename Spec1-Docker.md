@@ -2,14 +2,14 @@
 
 
 ## Objectives
-## A. Understand a flare from docker
+### A. Understand a flare from docker
 1. Know where to find:
 	* The env vars used
 	* The list of the containers on the host
 	* The details about the agent container
 2. Know from the flare if the agent is running OK (Health)
 
-## B. Container Architecture
+### B. Container Architecture
 1. Know the high level concept of what a container is and how it exists in a host (permissions, image, etc). Simply put, why do people use it and how is it different from the traditional setup of a VM? 
 2. Know the differences between the container installation of the agent versus host installation in terms of command lines to run
 3. Have the agent installed on a docker environment getting check metrics (docker at least) and know how to get the status.
