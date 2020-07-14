@@ -20,17 +20,30 @@
 
 - Lightweight
 	- only has the bare minimum to run the application
-	
 - Portability
 	- easy to install, easy to delete without leaving any straggler files
-	- applications with conflicting dependencies can coexist.
 - Security
 	- a container only has access to files you give it access to. This applies also applies to ports.
 - Configuration
 	- can limit cpu and memory resources in a container level, making allocations uniform across the board
  - Consistency
-	- Containers can also include software dependencies and anything really, making sure that the application will run in a consistent manner. You will not have to think if you're missing something since it is already embedded in the container.
-  
+	- You can be sure that the app deployed is the final version of the product that you want to run.
+
+
+## Container Architecture
+
+* Containers: 
+	- `docker ps`
+	- `docker ps -a`
+* Images:
+	- `docker images`
+* Networks:
+	- `docker network ls`
+*  Logs:
+	- `docker logs <container id>` **can get logs from stopped containers
+* Container Metadata
+	-  `docker inspect`
+	
 
 ## Installation Command
 - https://github.com/JM-Lazaro/KB/wiki/Docker-Agent-Installation-Command
@@ -66,22 +79,6 @@ How do you know if the flare is from a container?
 	- datadog.yaml
 	- diagnose.yaml
 	- docker_ps.yaml
-
-
-## Container Architecture
-
-* Containers: 
-	- `docker ps`
-	- `docker ps -a`
-* Images:
-	- `docker images`
-* Networks:
-	- `docker network ls`
-		
-*  Logs:
-	- `docker logs <container id>` **can get logs from stopped containers
-* Container Metadata
-	-  `docker inspect`
 
 
 ## Networking
