@@ -93,7 +93,7 @@ How do you know if the flare is from a container?
 	- diagnose.yaml
 	- docker_ps.yaml
 
-
+## Networking Exercises
 	
 
 Exercise:
