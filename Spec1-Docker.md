@@ -14,7 +14,7 @@
 2. Know the differences between the container installation of the agent versus host installation in terms of command lines to run
 3. Have the agent installed on a docker environment getting check metrics (docker at least) and know how to get the status.
 
--
+---
 
 ## Why Do People Use Containers
 
