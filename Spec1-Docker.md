@@ -32,6 +32,7 @@
 
 ## Container Architecture
 
+Main:
 * Containers: 
 	- `docker ps`
 	- `docker ps -a`
@@ -40,6 +41,7 @@
 * Networks:
 	- `docker network ls`
 
+Others:
 *  Logs:
 	- `docker logs <container id>` **can get logs from stopped containers
 * Container Metadata
