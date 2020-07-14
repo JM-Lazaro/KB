@@ -90,6 +90,8 @@ Types of Docker Networks
 	* bridge - every container has their own network namespace
 	* host - container uses the host network namespace
 	* none - none, just none
+	
+<img src="https://user-images.githubusercontent.com/30991348/87386124-1d6aad80-c5e3-11ea-927b-6e37a17afd3e.png" width="500" height="332" alt="_DSC4652"></a>	
 
 Exercise:
 1. create an nginx container in default
